@@ -49,7 +49,8 @@ void compile_program(const string &text, string output_file) {
   stack<int> loop_stack;
 
   // To name loops
-  int loop_count=0;
+  int loop_counter = 0;
+  int curr_loop=0;
 
   for(char bf_op : text) {
     switch(bf_op) {
@@ -95,14 +96,14 @@ void compile_program(const string &text, string output_file) {
         break;
       case '[':
         // Start of a loop
-        loop_stack.push(loop_count);
+        loop_stack.push(loop_counter);
         // Label the loop
-        asm_file << "loop_" << loop_count << ":" << endl;
+        asm_file << "loop_" << loop_counter << ":" << endl;
         // Compare the byte at the data pointer to 0
         asm_file << "   cmp byte [rsi], 0" << endl;
         // Jump to the end of the loop if the byte is 0
-        asm_file << "   je loop_" << loop_count << endl;
-        loop_count++;
+        asm_file << "   je loop_end_" << loop_counter << endl;
+        loop_counter++;
         break;
       case ']':
         // End of a loop
@@ -110,12 +111,14 @@ void compile_program(const string &text, string output_file) {
           cerr << "Unmatched ']' exiting" << endl;
           return;
         }
-        loop_count = loop_stack.top();
+        curr_loop = loop_stack.top();
         loop_stack.pop();
+        // Label loop end
+        asm_file << "loop_end_" << curr_loop << ":" << endl;
         // Compare the byte at the data pointer to 0
         asm_file << "   cmp byte [rsi], 0" << endl;
         // Jump back to the start of the loop if the byte is not 0
-        asm_file << "   jne loop_" << loop_count << endl;
+        asm_file << "   jne loop_" << curr_loop << endl;
         break;
       default:
         // Ignore any other character
