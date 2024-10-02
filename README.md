@@ -20,10 +20,20 @@ Use the `-p` flag with the brainfuck_interpreter_cpp target to enable the profil
 
 # Using the brainfuck compiler
 ```bash
-./brainfuck_compiler <brainfuck_file> <output_file.asm>
+./brainfuck_compiler <brainfuck_file> <output_file.asm> [-p]
 nasm -f elf64 <output_file.asm>
 ld <output_file.o> -o <executable_name>
 ./executable
+```
+
+The `-p` flag is to enable the profiler which gathers information about loops.
+
+# Using the compile and execute script
+Instead of using the brainfuck compiler executable in the way described above, you can use this script to do it in a 
+single command
+```bash
+cd scripts
+python3 compile_and_execute <relative/path/to/benchmark> [-p]
 ```
 
 ## Notes for Brainfuck to X86_64 compiler
