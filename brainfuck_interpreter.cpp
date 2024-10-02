@@ -129,12 +129,10 @@ void parse_program(const string &text) {
 
     switch (command) {
       case '>':  // move pointer right
-        if(enable_profiler)
         ptr++;
         break;
 
       case '<':  // move pointer left
-        if(enable_profiler)
         if (ptr > 0)
           ptr--;
         else {
@@ -144,22 +142,18 @@ void parse_program(const string &text) {
         break;
 
       case '+':  // increment the value at current cell
-        if(enable_profiler)
         tape[ptr]++;
         break;
 
       case '-':  // decrement the value at current cell
-        if(enable_profiler)
         tape[ptr]--;
         break;
 
       case '.':  // output the value at current cell as character
-        if(enable_profiler)
         putchar(tape[ptr]);
         break;
 
       case ',':  // read a character from input into the current cell
-        if(enable_profiler)
         tape[ptr] = getchar();
         break;
 
@@ -177,7 +171,6 @@ void parse_program(const string &text) {
         break;
 
       case ']':  // end loop
-        if(enable_profiler)
         if (tape[ptr] != 0) {
           ip = loop_map.at(ip);  // jump back to the matching '['
         }
